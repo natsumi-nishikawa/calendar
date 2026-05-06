@@ -1,58 +1,66 @@
 import { useState } from "react";
-import { auth } from "./firebase/config";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import LoginPage from "./pages/LoginPage";
+import CalendarPage from "./pages/CalendarPage";
 
 function App() {
-  const [isRegister, setIsRegister] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // 今表示している画面
+  const [page, setPage] = useState("login");
 
-  const handleAuth = async (e) => {
-    e.preventDefault();
+  // 選択した日時
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
 
-    try {
-      if (isRegister) {
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("新規登録しました");
-      } else {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("ログインしました");
-      }
-    } catch (error) {
-      alert(error.message);
-    }
+  // ログイン成功時
+  const handleLoginSuccess = () => {
+    setPage("calendar");
+  };
+
+  // カレンダーの時間枠クリック時
+  const handleSelectSlot = (date, time) => {
+    setSelectedDate(date);
+    setSelectedTime(time);
+
+    setPage("reservation");
   };
 
   return (
     <div>
-      <h1>{isRegister ? "新規登録" : "ログイン"}</h1>
+      {/* ログイン画面 */}
+      {page === "login" && (
+        <LoginPage onLoginSuccess={handleLoginSuccess} />
+      )}
 
-      <form onSubmit={handleAuth}>
-        <input
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      {/* カレンダー画面 */}
+      {page === "calendar" && (
+        <CalendarPage onSelectSlot={handleSelectSlot} />
+      )}
 
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      {/* 予約フォーム画面 */}
+      {page === "reservation" && (
+        <div>
+          <h1>予約フォーム</h1>
 
-        <button type="submit">
-          {isRegister ? "登録" : "ログイン"}
-        </button>
-      </form>
+          <p>
+            選択日時：
+            {selectedDate?.getMonth() + 1}/
+            {selectedDate?.getDate()}
+            {" "}
+            {selectedTime}
+          </p>
 
-      <button onClick={() => setIsRegister(!isRegister)}>
-        {isRegister ? "ログイン画面へ" : "新規登録へ"}
-      </button>
+          <input type="text" placeholder="名前" />
+          <br />
+
+          <input type="email" placeholder="メールアドレス" />
+          <br />
+
+          <button>予約する</button>
+
+          <button onClick={() => setPage("calendar")}>
+            戻る
+          </button>
+        </div>
+      )}
     </div>
   );
 }
