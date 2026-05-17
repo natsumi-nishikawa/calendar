@@ -1,6 +1,8 @@
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import CalendarPage from "./pages/CalendarPage";
+import ReservationFormPage from "./pages/ReservationFormPage";
+import ConfirmPage from "./pages/ConfirmPage";
 
 function App() {
   // 今表示している画面
@@ -9,6 +11,7 @@ function App() {
   // 選択した日時
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
+  const [reservationData, setReservationData] = useState(null);
 
   // ログイン成功時
   const handleLoginSuccess = () => {
@@ -19,8 +22,12 @@ function App() {
   const handleSelectSlot = (date, time) => {
     setSelectedDate(date);
     setSelectedTime(time);
-
     setPage("reservation");
+  };
+
+  const handleConfirmReservation = (data) => {
+    setReservationData(data);
+    setPage("confirm");
   };
 
   return (
@@ -37,29 +44,21 @@ function App() {
 
       {/* 予約フォーム画面 */}
       {page === "reservation" && (
-        <div>
-          <h1>予約フォーム</h1>
+        <ReservationFormPage
+          selectedDate={selectedDate}
+          selectedTime={selectedTime}
+          onBack={() => setPage("calendar")}
+          onConfirm={handleConfirmReservation}
+        />
+      )}
 
-          <p>
-            選択日時：
-            {selectedDate?.getMonth() + 1}/
-            {selectedDate?.getDate()}
-            {" "}
-            {selectedTime}
-          </p>
-
-          <input type="text" placeholder="名前" />
-          <br />
-
-          <input type="email" placeholder="メールアドレス" />
-          <br />
-
-          <button>予約する</button>
-
-          <button onClick={() => setPage("calendar")}>
-            戻る
-          </button>
-        </div>
+      {/* 予約確認画面 */}
+      {page === "confirm" && (
+        <ConfirmPage
+          reservationData={reservationData}
+          onBack={() => setPage("reservation")}
+          onSubmit={() => alert("予約を確定しました")}
+        />
       )}
     </div>
   );
