@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-function LoginPage({ onLoginSuccess }) {
+function LoginPage({ onLoginSuccess, onAdminLogin }) {
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,6 +57,11 @@ function LoginPage({ onLoginSuccess }) {
       <button onClick={() => setIsRegister(!isRegister)}>
         {isRegister ? "ログイン画面へ" : "新規登録へ"}
       </button>
+
+      <button type="button" onClick={onAdminLogin}>
+        管理者ログインへ
+      </button>
+      
     </div>
   );
 }

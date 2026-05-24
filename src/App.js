@@ -1,3 +1,5 @@
+import AdminLoginPage from "./pages/AdminLoginPage";
+import AdminPage from "./pages/AdminPage";
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import CalendarPage from "./pages/CalendarPage";
@@ -12,6 +14,21 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
   const [reservationData, setReservationData] = useState(null);
+  const [reservations, setReservations] = useState([]);
+
+  // 予約フォームの入力内容をApp.jsで保持する
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    service: "",
+    staff: "",
+    request: "",
+  });
+
+  const handleAdminLoginSuccess = () => {
+    setPage("admin");
+  };
 
   // ログイン成功時
   const handleLoginSuccess = () => {
@@ -30,11 +47,34 @@ function App() {
     setPage("confirm");
   };
 
+  const handleSubmitReservation = () => {
+    setReservations([...reservations, reservationData]);
+    alert("予約を確定しました");
+    setPage("calendar");
+  };
+
   return (
     <div>
+      {page === "adminLogin" && (
+        <AdminLoginPage
+          onAdminLoginSuccess={handleAdminLoginSuccess}
+          onBack={() => setPage("login")}
+        />
+      )}
+
+      {page === "admin" && (
+        <AdminPage
+          reservations={reservations}
+          onBack={() => setPage("calendar")}
+        />
+      )}
+
       {/* ログイン画面 */}
       {page === "login" && (
-        <LoginPage onLoginSuccess={handleLoginSuccess} />
+        <LoginPage
+          onLoginSuccess={handleLoginSuccess}
+          onAdminLogin={() => setPage("adminLogin")}
+        />
       )}
 
       {/* カレンダー画面 */}
@@ -47,6 +87,8 @@ function App() {
         <ReservationFormPage
           selectedDate={selectedDate}
           selectedTime={selectedTime}
+          formData={formData}
+          setFormData={setFormData}
           onBack={() => setPage("calendar")}
           onConfirm={handleConfirmReservation}
         />
