@@ -48,8 +48,22 @@ function App() {
   };
 
   const handleSubmitReservation = () => {
+    const isSameStaffAlreadyBooked = reservations.some(
+      (reservation) =>
+        reservation.dateText === reservationData.dateText &&
+        reservation.time === reservationData.time &&
+        reservation.staff === reservationData.staff
+    );
+  
+    if (isSameStaffAlreadyBooked) {
+      alert("この時間帯のこの担当者はすでに予約されています");
+      return;
+    }
+  
     setReservations([...reservations, reservationData]);
+  
     alert("予約を確定しました");
+  
     setPage("calendar");
   };
 
@@ -79,7 +93,11 @@ function App() {
 
       {/* カレンダー画面 */}
       {page === "calendar" && (
-        <CalendarPage onSelectSlot={handleSelectSlot} />
+        <CalendarPage
+          reservations={reservations}
+          onSelectSlot={handleSelectSlot}
+          onLogout={() => setPage("login")}
+        />
       )}
 
       {/* 予約フォーム画面 */}
@@ -99,7 +117,7 @@ function App() {
         <ConfirmPage
           reservationData={reservationData}
           onBack={() => setPage("reservation")}
-          onSubmit={() => alert("予約を確定しました")}
+          onSubmit={handleSubmitReservation}
         />
       )}
     </div>

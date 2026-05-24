@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CalendarPage({ onSelectSlot }) {
+function CalendarPage({ reservations, onSelectSlot, onLogout }) {
   const times = [
     "10:00",
     "11:00",
@@ -21,6 +21,30 @@ function CalendarPage({ onSelectSlot }) {
       date.setDate(weekStart.getDate() + index);
       return date;
     });
+  };
+
+  const getDateText = (date) => {
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  };
+
+  const getReservationStatus = (date, time) => {
+    const dateText = getDateText(date);
+
+    const sameSlotReservations = reservations.filter(
+      (reservation) =>
+        reservation.dateText === dateText &&
+        reservation.time === time
+    );
+
+    if (sameSlotReservations.length === 0) {
+      return "○";
+    }
+
+    if (sameSlotReservations.length < 3) {
+      return "△";
+    }
+
+    return "×";
   };
 
   const weekDays = getWeekDays();
@@ -50,7 +74,7 @@ function CalendarPage({ onSelectSlot }) {
             <th>時間 / 日付</th>
             {weekDays.map((day) => (
               <th key={day.toISOString()}>
-                {day.getMonth() + 1}/{day.getDate()}
+                {getDateText(day)}
               </th>
             ))}
           </tr>
@@ -61,19 +85,36 @@ function CalendarPage({ onSelectSlot }) {
             <tr key={time}>
               <td>{time}</td>
 
-              {weekDays.map((day) => (
-                <td
-                  key={`${day.toISOString()}-${time}`}
-                  onClick={() => onSelectSlot(day, time)}
-                  style={{ cursor: "pointer", padding: "10px" }}
-                >
-                  空き
-                </td>
-              ))}
+              {weekDays.map((day) => {
+                const status = getReservationStatus(day, time);
+
+                return (
+                  <td
+                    key={`${day.toISOString()}-${time}`}
+                    onClick={() => {
+                      if (status === "×") {
+                        return;
+                      }
+
+                      onSelectSlot(day, time);
+                    }}
+                    style={{
+                      cursor: status === "×" ? "not-allowed" : "pointer",
+                      padding: "10px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {status}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
       </table>
+
+      <button onClick={onLogout}>ログオフ</button>
+
     </div>
   );
 }
