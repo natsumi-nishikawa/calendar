@@ -113,6 +113,7 @@ function ReservationFormPage({
           <option value="">選択してください</option>
           <option value="田中">田中</option>
           <option value="鈴木">鈴木</option>
+          <option value="佐藤">佐藤</option>
           <option value="担当者指定なし">担当者指定なし</option>
         </select>
 
@@ -129,10 +130,6 @@ function ReservationFormPage({
 
         <br /><br />
 
-        <button type="submit">確認画面へ</button>
-        <button type="button" onClick={onBack}>
-          戻る
-        </button>
       </form>
     </div>
   );
