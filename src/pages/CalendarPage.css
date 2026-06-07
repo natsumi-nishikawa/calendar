@@ -1,0 +1,96 @@
+.calendar-page {
+    min-height: 100vh;
+    padding: 20px 40px;
+    background-color: #f7f7f7;
+  }
+  
+  .calendar-title {
+    background-color: #e1defa;
+    color: #2f3d60;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 14px;
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+  }
+  
+  .calendar-description {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .calendar-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  
+  .calendar-buttons button,
+  .logout-button {
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  
+  .calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .calendar-table th {
+    background-color: #dbe8f7;
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  .calendar-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  
+  .legend-ok {
+    color: #4caf50;
+  }
+  
+  .legend-ng {
+    color: #d32f2f;
+  }
+  
+  .time-cell {
+    background-color: #eeeeee;
+    font-weight: bold;
+  }
+  
+  .status-cell {
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .status-○ {
+    color: #f28b8b;
+  }
+  
+  .status-△ {
+    color: #e6a700;
+  }
+  
+  .status-× {
+    color: #666;
+    cursor: not-allowed;
+  }
+  
+  .logout-button {
+    margin-top: 20px;
+  }

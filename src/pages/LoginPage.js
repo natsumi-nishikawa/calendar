@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import "./LoginPage.css";
 
 function LoginPage({ onLoginSuccess, onAdminLogin }) {
   const [isRegister, setIsRegister] = useState(false);
@@ -17,13 +18,11 @@ function LoginPage({ onLoginSuccess, onAdminLogin }) {
       if (isRegister) {
         await createUserWithEmailAndPassword(auth, email, password);
         alert("新規登録しました");
-        console.log("onLoginSuccess呼ぶ");
-        onLoginSuccess(); // 登録後にカレンダーへ
+        onLoginSuccess();
       } else {
         await signInWithEmailAndPassword(auth, email, password);
         alert("ログインしました");
-        console.log("onLoginSuccess呼ぶ");
-        onLoginSuccess(); // ログイン後にカレンダーへ
+        onLoginSuccess();
       }
     } catch (error) {
       alert(error.message);
@@ -31,37 +30,48 @@ function LoginPage({ onLoginSuccess, onAdminLogin }) {
   };
 
   return (
-    <div>
-      <h1>{isRegister ? "新規登録" : "ログイン"}</h1>
+    <div className="login-page">
+      <div className="login-card">
+        <h1>{isRegister ? "新規登録" : "ログイン"}</h1>
 
-      <form onSubmit={handleAuth}>
-        <input
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <form onSubmit={handleAuth}>
+          <label>メールアドレス</label>
+          <input
+            type="email"
+            placeholder="メールアドレス"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <label>パスワード</label>
+          <input
+            type="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <button type="submit">
-          {isRegister ? "登録" : "ログイン"}
+          <button className="main-button" type="submit">
+            {isRegister ? "登録" : "ログイン"}
+          </button>
+        </form>
+
+        <p>
+          {isRegister ? "ログイン画面は" : "新規登録は"}{" "}
+          <button
+            className="link-button"
+            type="button"
+            onClick={() => setIsRegister(!isRegister)}
+          >
+            こちら
+          </button>
+          から。
+        </p>
+
+        <button className="admin-button" type="button" onClick={onAdminLogin}>
+          管理者ログインへ
         </button>
-      </form>
-
-      <button onClick={() => setIsRegister(!isRegister)}>
-        {isRegister ? "ログイン画面へ" : "新規登録へ"}
-      </button>
-
-      <button type="button" onClick={onAdminLogin}>
-        管理者ログインへ
-      </button>
-      
+      </div>
     </div>
   );
 }

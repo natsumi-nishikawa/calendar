@@ -1,3 +1,4 @@
+import "./CalendarPage.css";
 import { useState } from "react";
 
 function CalendarPage({ reservations, onSelectSlot, onLogout }) {
@@ -26,6 +27,8 @@ function CalendarPage({ reservations, onSelectSlot, onLogout }) {
   const getDateText = (date) => {
     return `${date.getMonth() + 1}/${date.getDate()}`;
   };
+
+  const weekLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
   const getReservationStatus = (date, time) => {
     const dateText = getDateText(date);
@@ -62,47 +65,47 @@ function CalendarPage({ reservations, onSelectSlot, onLogout }) {
   };
 
   return (
-    <div>
-      <h1>予約カレンダー</h1>
-
-      <button onClick={goPrevWeek}>前の週</button>
-      <button onClick={goNextWeek}>次の週</button>
-
-      <table border="1">
+    <div className="calendar-page">
+      <div className="calendar-title">時間予約</div>
+  
+      <p className="calendar-description">
+        希望予約日時を選択してください
+      </p>
+  
+      <div className="calendar-buttons">
+        <button onClick={goPrevWeek}>前の週</button>
+        <button onClick={goNextWeek}>次の週</button>
+      </div>
+  
+      <table className="calendar-table">
         <thead>
           <tr>
             <th>時間 / 日付</th>
             {weekDays.map((day) => (
-              <th key={day.toISOString()}>
-                {getDateText(day)}
+              <th key={day.toISOString()}>                
+                <div>{getDateText(day)}</div>
+                <div>{weekLabels[day.getDay()]}</div>
               </th>
             ))}
           </tr>
         </thead>
-
+  
         <tbody>
           {times.map((time) => (
             <tr key={time}>
-              <td>{time}</td>
-
+              <td className="time-cell">{time}</td>
+  
               {weekDays.map((day) => {
                 const status = getReservationStatus(day, time);
-
+  
                 return (
                   <td
                     key={`${day.toISOString()}-${time}`}
                     onClick={() => {
-                      if (status === "×") {
-                        return;
-                      }
-
+                      if (status === "×") return;
                       onSelectSlot(day, time);
                     }}
-                    style={{
-                      cursor: status === "×" ? "not-allowed" : "pointer",
-                      padding: "10px",
-                      textAlign: "center",
-                    }}
+                    className={`status-cell status-${status}`}
                   >
                     {status}
                   </td>
@@ -113,8 +116,19 @@ function CalendarPage({ reservations, onSelectSlot, onLogout }) {
         </tbody>
       </table>
 
-      <button onClick={onLogout}>ログオフ</button>
+      <div className="calendar-buttons">
+        <button onClick={goPrevWeek}>前の週</button>
+        <button onClick={goNextWeek}>次の週</button>
+      </div>
 
+      <div className="calendar-legend">
+        <span className="legend-ok">○：予約可能時間です。</span>
+        <span className="legend-ng">×：予約済みです。</span>
+      </div>
+  
+      <button className="logout-button" onClick={onLogout}>
+        ログオフ
+      </button>
     </div>
   );
 }

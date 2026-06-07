@@ -1,0 +1,60 @@
+.confirm-page {
+    min-height: 100vh;
+    background-color: #8ff8f3;
+    padding: 40px;
+  }
+  
+  .confirm-title {
+    border-bottom: 2px solid #333;
+    padding-bottom: 12px;
+    margin-bottom: 30px;
+  }
+  
+  .confirm-content {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  
+  .shop-card {
+    width: 360px;
+    height: 120px;
+    background-color: #80c8f2;
+    border-radius: 8px;
+    text-align: center;
+    padding: 30px;
+  }
+  
+  .confirm-card {
+    width: 420px;
+    background-color: #eba5df;
+    border-radius: 8px;
+    padding: 30px;
+  }
+  
+  .confirm-card p {
+    margin-bottom: 20px;
+  }
+  
+  .confirm-buttons {
+    text-align: center;
+    margin-top: 24px;
+  }
+  
+  .confirm-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    margin-right: 12px;
+    cursor: pointer;
+  }
+  
+  .confirm-back {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+  }

@@ -80,6 +80,7 @@ function App() {
         <AdminPage
           reservations={reservations}
           onBack={() => setPage("calendar")}
+          onLogout={() => setPage("login")}
         />
       )}
 

@@ -1,4 +1,4 @@
-function AdminPage({ reservations, onBack }) {
+function AdminPage({ reservations, onBack, onLogout }) {
   return (
     <div>
       <h1>予約一覧</h1>
@@ -37,7 +37,10 @@ function AdminPage({ reservations, onBack }) {
         </table>
       )}
 
-      <button onClick={onBack}>戻る</button>
+    <button onClick={onLogout}>
+     ログオフ
+    </button>
+
     </div>
   );
 }

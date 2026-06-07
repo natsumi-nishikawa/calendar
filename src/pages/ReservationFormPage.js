@@ -1,3 +1,5 @@
+import "./ReservationFormPage.css";
+
 function ReservationFormPage({
   selectedDate,
   selectedTime,
@@ -38,99 +40,94 @@ function ReservationFormPage({
   };
 
   return (
-    <div>
-      <h1>予約フォーム</h1>
+    <div className="reservation-page">
+      <div className="reservation-card">
+        <h1>予約フォーム</h1>
 
-      <p>
-        予約日時：
-        {selectedDate?.getMonth() + 1}/{selectedDate?.getDate()} {selectedTime}
-      </p>
+        <p>
+          予約日時：
+          {selectedDate?.getMonth() + 1}/{selectedDate?.getDate()} {selectedTime}
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <label>氏名</label>
-        <br />
-        <input
-          name="name"
-          type="text"
-          placeholder="氏名を入力"
-          value={formData.name}
-          onChange={handleChange}
-        />
+        <form onSubmit={handleSubmit}>
+          <label>氏名</label>
+          <br />
+          <input
+            name="name"
+            type="text"
+            placeholder="氏名を入力"
+            value={formData.name}
+            onChange={handleChange}
+          />
 
-        <br /><br />
+          <label>電話番号</label>
+          <br />
+          <input
+            name="phone"
+            type="tel"
+            placeholder="電話番号を入力"
+            value={formData.phone}
+            onChange={handleChange}
+          />
 
-        <label>電話番号</label>
-        <br />
-        <input
-          name="phone"
-          type="tel"
-          placeholder="電話番号を入力"
-          value={formData.phone}
-          onChange={handleChange}
-        />
+          <label>メールアドレス</label>
+          <br />
+          <input
+            name="email"
+            type="email"
+            placeholder="メールアドレスを入力"
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-        <br /><br />
+          <label>サービス</label>
+          <br />
+          <select
+            name="service"
+            value={formData.service}
+            onChange={handleChange}
+          >
+            <option value="">選択してください</option>
+            <option value="カット">カット</option>
+            <option value="カラー">カラー</option>
+            <option value="カット×カラー">カット×カラー</option>
+            <option value="カット×カラー×トリートメント">
+              カット×カラー×トリートメント
+            </option>
+            <option value="パーマ">パーマ</option>
+            <option value="髪質改善">髪質改善</option>
+          </select>
 
-        <label>メールアドレス</label>
-        <br />
-        <input
-          name="email"
-          type="email"
-          placeholder="メールアドレスを入力"
-          value={formData.email}
-          onChange={handleChange}
-        />
+          <label>担当者</label>
+          <br />
+          <select
+            name="staff"
+            value={formData.staff}
+            onChange={handleChange}
+          >
+            <option value="">選択してください</option>
+            <option value="田中">田中</option>
+            <option value="鈴木">鈴木</option>
+            <option value="佐藤">佐藤</option>
+            <option value="担当者指定なし">担当者指定なし</option>
+          </select>
 
-        <br /><br />
+          <label>要望</label>
+          <br />
+          <textarea
+            name="request"
+            placeholder="要望を入力"
+            value={formData.request}
+            onChange={handleChange}
+          />
 
-        <label>サービス</label>
-        <br />
-        <select
-          name="service"
-          value={formData.service}
-          onChange={handleChange}
-        >
-          <option value="">選択してください</option>
-          <option value="カット">カット</option>
-          <option value="カラー">カラー</option>
-          <option value="カット×カラー">カット×カラー</option>
-          <option value="カット×カラー×トリートメント">
-            カット×カラー×トリートメント
-          </option>
-          <option value="パーマ">パーマ</option>
-          <option value="髪質改善">髪質改善</option>
-        </select>
+          <button type="submit">確認画面へ</button>
+          <button type="button" onClick={onBack}>
+            戻る
+          </button>
 
-        <br /><br />
-
-        <label>担当者</label>
-        <br />
-        <select
-          name="staff"
-          value={formData.staff}
-          onChange={handleChange}
-        >
-          <option value="">選択してください</option>
-          <option value="田中">田中</option>
-          <option value="鈴木">鈴木</option>
-          <option value="佐藤">佐藤</option>
-          <option value="担当者指定なし">担当者指定なし</option>
-        </select>
-
-        <br /><br />
-
-        <label>要望</label>
-        <br />
-        <textarea
-          name="request"
-          placeholder="要望を入力"
-          value={formData.request}
-          onChange={handleChange}
-        />
-
-        <br /><br />
-
-      </form>
+        </form>
+      </div>
     </div>
   );
 }
