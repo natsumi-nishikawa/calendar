@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./AdminLoginPage.css";
 
 function AdminLoginPage({ onAdminLoginSuccess, onBack }) {
   const [adminId, setAdminId] = useState("");
@@ -15,35 +16,36 @@ function AdminLoginPage({ onAdminLoginSuccess, onBack }) {
   };
 
   return (
-    <div>
-      <h1>管理者ログイン</h1>
+    <div className="admin-login-page">
+      <div className="admin-login-card">
+        <h1>管理者ログイン</h1>
 
-      <form onSubmit={handleAdminLogin}>
-        <label>管理者ID</label>
-        <br />
-        <input
-          type="text"
-          value={adminId}
-          onChange={(e) => setAdminId(e.target.value)}
-        />
+        <form onSubmit={handleAdminLogin}>
+          <label>管理者ID</label>
+          <input
+            type="text"
+            placeholder="管理者ID"
+            value={adminId}
+            onChange={(e) => setAdminId(e.target.value)}
+          />
 
-        <br /><br />
+          <label>パスワード</label>
+          <input
+            type="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <label>パスワード</label>
-        <br />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <button className="admin-login-main-button" type="submit">
+            ログイン
+          </button>
 
-        <br /><br />
-
-        <button type="submit">ログイン</button>
-        <button type="button" onClick={onBack}>
-          戻る
-        </button>
-      </form>
+          <button className="admin-login-back-button" type="button" onClick={onBack}>
+            戻る
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

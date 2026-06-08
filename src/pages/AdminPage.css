@@ -1,0 +1,75 @@
+.admin-page {
+    min-height: 100vh;
+    background-color: #f4fbfc;
+    padding: 32px;
+  }
+  
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e1defa;
+    padding: 18px 24px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  }
+  
+  .admin-header h1 {
+    margin: 0;
+    color: #2f3d60;
+  }
+  
+  .admin-card {
+    background-color: white;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+  }
+  
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-table th {
+    background-color: #dbe8f7;
+    color: #2f3d60;
+    padding: 12px;
+    border: 1px solid #ccc;
+  }
+  
+  .admin-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .admin-table tbody tr:nth-child(even) {
+    background-color: #f7f9fc;
+  }
+  
+  .empty-message {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+  }
+  
+  .admin-logout-button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  
+  .admin-back-button {
+    background-color: white;
+    color: #333;
+  }
+  
+  .admin-logout-button {
+    background-color: #007bff;
+    color: white;
+  }
