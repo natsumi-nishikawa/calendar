@@ -1,70 +1,123 @@
-# Getting Started with Create React App
+# 美容室予約システム
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 概要
 
-## Available Scripts
+ReactとFirebaseを使用して作成した美容室向け予約システムです。
 
-In the project directory, you can run:
+利用者はカレンダーから予約日時を選択し、予約内容を入力して予約を行うことができます。
+管理者は管理画面から予約一覧を確認できます。
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 使用技術
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### フロントエンド
 
-### `npm test`
+* React
+* JavaScript
+* CSS
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### バックエンド
 
-### `npm run build`
+* Firebase Authentication
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 機能一覧
 
-### `npm run eject`
+### ユーザー機能
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* 新規登録
+* ログイン
+* カレンダーから日時選択
+* 予約フォーム入力
+* 予約内容確認
+* 予約確定
+* ログオフ
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 管理者機能
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* 管理者ログイン
+* 予約一覧表示
+* ログオフ
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 予約機能
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### カレンダー表示
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* 1週間表示
+* 前週・次週切替
 
-### Code Splitting
+### 予約状況表示
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+* ○：予約可能
+* △：残り枠あり
+* ×：予約不可
 
-### Analyzing the Bundle Size
+### 予約制御
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+* 同一日時・同一担当者の重複予約防止
+* 担当者3名まで同時予約可能
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 予約フォーム項目
 
-### Advanced Configuration
+* 氏名
+* 電話番号
+* メールアドレス
+* サービス
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  * カット
+  * カラー
+  * カット×カラー
+  * カット×カラー×トリートメント
+  * パーマ
+  * 髪質改善
+* 担当者
+* 要望
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 画面一覧
 
-### `npm run build` fails to minify
+### ユーザー
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. ログイン画面
+2. カレンダー画面
+3. 予約フォーム画面
+4. 予約確認画面
+
+### 管理者
+
+1. 管理者ログイン画面
+2. 予約一覧画面
+
+---
+
+## 今後の実装予定
+
+* Firestoreへの予約データ保存
+* 管理画面から予約削除
+* 管理画面から予約編集
+* メール通知機能
+* レスポンシブ対応
+* 管理者アカウントのFirebase認証対応
+
+---
+
+## 起動方法
+
+```bash
+npm install
+npm start
+```
+
+ブラウザで以下へアクセス
+
+```text
+http://localhost:3000
+```

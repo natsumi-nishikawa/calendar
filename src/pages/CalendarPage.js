@@ -123,6 +123,7 @@ function CalendarPage({ reservations, onSelectSlot, onLogout }) {
 
       <div className="calendar-legend">
         <span className="legend-ok">○：予約可能時間です。</span>
+        <span className="legend-triangle">△：残り枠あり僅かです。</span>
         <span className="legend-ng">×：予約済みです。</span>
       </div>
   
