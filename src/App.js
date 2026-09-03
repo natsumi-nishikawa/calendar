@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import CalendarPage from "./pages/CalendarPage";
 import ReservationFormPage from "./pages/ReservationFormPage";
 import ConfirmPage from "./pages/ConfirmPage";
+import MyReservationsPage from "./pages/MyReservationsPage";
 
 function App() {
   // 今表示している画面
@@ -15,6 +16,7 @@ function App() {
   const [selectedTime, setSelectedTime] = useState("");
   const [reservationData, setReservationData] = useState(null);
   const [reservations, setReservations] = useState([]);
+  const [loginUserEmail, setLoginUserEmail] = useState("");
 
   // 予約フォームの入力内容をApp.jsで保持する
   const [formData, setFormData] = useState({
@@ -31,7 +33,8 @@ function App() {
   };
 
   // ログイン成功時
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (email) => {
+    setLoginUserEmail(email);
     setPage("calendar");
   };
 
@@ -60,11 +63,33 @@ function App() {
       return;
     }
   
-    setReservations([...reservations, reservationData]);
+    setReservations([
+      ...reservations,
+      {
+        ...reservationData,
+        userEmail: loginUserEmail,
+      },
+    ]);
   
     alert("予約を確定しました");
   
     setPage("calendar");
+  };
+
+  const handleCancelReservation = (index) => {
+    const userReservations = reservations.filter(
+      (reservation) => reservation.userEmail === loginUserEmail
+    );
+  
+    const targetReservation = userReservations[index];
+  
+    setReservations(
+      reservations.filter(
+        (reservation) => reservation !== targetReservation
+      )
+    );
+  
+    alert("予約をキャンセルしました");
   };
 
   return (
@@ -98,6 +123,7 @@ function App() {
           reservations={reservations}
           onSelectSlot={handleSelectSlot}
           onLogout={() => setPage("login")}
+          onMyReservations={() => setPage("myReservations")}
         />
       )}
 
@@ -121,6 +147,17 @@ function App() {
           onSubmit={handleSubmitReservation}
         />
       )}
+
+      {page === "myReservations" && (
+        <MyReservationsPage
+          reservations={reservations.filter(
+            (reservation) => reservation.userEmail === loginUserEmail
+          )}
+          onBack={() => setPage("calendar")}
+          onCancel={handleCancelReservation}
+        />
+      )}
+      
     </div>
   );
 }

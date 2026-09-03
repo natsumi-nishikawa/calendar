@@ -63,6 +63,10 @@
   .legend-ok {
     color: #4caf50;
   }
+
+  .legend-triangle {
+    color: #4caf50;
+  }
   
   .legend-ng {
     color: #d32f2f;

@@ -1,7 +1,8 @@
 import "./CalendarPage.css";
 import { useState } from "react";
 
-function CalendarPage({ reservations, onSelectSlot, onLogout }) {
+function CalendarPage({ reservations, onSelectSlot, onLogout, onMyReservations }) {
+  console.log("onMyReservations:", onMyReservations);
   const times = [
     "10:00",
     "11:00",
@@ -126,7 +127,11 @@ function CalendarPage({ reservations, onSelectSlot, onLogout }) {
         <span className="legend-triangle">△：残り枠あり僅かです。</span>
         <span className="legend-ng">×：予約済みです。</span>
       </div>
-  
+
+      <button onClick={onMyReservations}>
+        自分の予約を見る
+      </button>
+
       <button className="logout-button" onClick={onLogout}>
         ログオフ
       </button>
