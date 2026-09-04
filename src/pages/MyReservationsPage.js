@@ -8,16 +8,23 @@ function MyReservationsPage({
   return (
     <div className="reservation-list-page">
       <div className="reservation-list-card">
+
         <h1>予約一覧</h1>
 
         {reservations.length === 0 ? (
-          <p className="no-reservations">予約はありません。</p>
+          <p className="no-reservations">
+            予約はありません。
+          </p>
         ) : (
           reservations.map((reservation, index) => (
-            <div className="reservation-item" key={index}>
+            <div
+              className="reservation-item"
+              key={index}
+            >
               <p>
                 <strong>予約日時：</strong>
-                {reservation.dateText} {reservation.time}
+                {reservation.dateText}{" "}
+                {reservation.time}
               </p>
 
               <p>
@@ -40,9 +47,13 @@ function MyReservationsPage({
           ))
         )}
 
-        <button className="back-button" onClick={onBack}>
+        <button
+          className="back-button"
+          onClick={onBack}
+        >
           カレンダーに戻る
         </button>
+
       </div>
     </div>
   );

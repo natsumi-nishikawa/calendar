@@ -62,6 +62,9 @@ function App() {
       alert("この時間帯のこの担当者はすでに予約されています");
       return;
     }
+
+    console.log("ログインユーザー:", loginUserEmail);
+    console.log("予約データ:", reservationData);
   
     setReservations([
       ...reservations,
@@ -91,6 +94,9 @@ function App() {
   
     alert("予約をキャンセルしました");
   };
+
+  console.log("現在のログインメール:", loginUserEmail);
+  console.log("現在の予約一覧:", reservations);
 
   return (
     <div>

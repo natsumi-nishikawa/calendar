@@ -18,11 +18,11 @@ function LoginPage({ onLoginSuccess, onAdminLogin }) {
       if (isRegister) {
         await createUserWithEmailAndPassword(auth, email, password);
         alert("新規登録しました");
-        onLoginSuccess();
+        onLoginSuccess(email);
       } else {
         await signInWithEmailAndPassword(auth, email, password);
         alert("ログインしました");
-        onLoginSuccess();
+        onLoginSuccess(email);
       }
     } catch (error) {
       alert(error.message);
