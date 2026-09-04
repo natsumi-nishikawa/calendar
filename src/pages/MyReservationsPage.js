@@ -1,37 +1,51 @@
+import "./MyReservationsPage.css";
+
 function MyReservationsPage({
-    reservations,
-    onBack,
-    onCancel,
-  }) {
-    return (
-      <div>
+  reservations,
+  onBack,
+  onCancel,
+}) {
+  return (
+    <div className="reservation-list-page">
+      <div className="reservation-list-card">
         <h1>予約一覧</h1>
-  
+
         {reservations.length === 0 ? (
-          <p>予約はありません。</p>
+          <p className="no-reservations">予約はありません。</p>
         ) : (
           reservations.map((reservation, index) => (
-            <div key={index}>
+            <div className="reservation-item" key={index}>
               <p>
-                予約日時：
+                <strong>予約日時：</strong>
                 {reservation.dateText} {reservation.time}
               </p>
-  
-              <p>サービス：{reservation.service}</p>
-              <p>担当者：{reservation.staff}</p>
-  
-              <button onClick={() => onCancel(index)}>
+
+              <p>
+                <strong>サービス：</strong>
+                {reservation.service}
+              </p>
+
+              <p>
+                <strong>担当者：</strong>
+                {reservation.staff}
+              </p>
+
+              <button
+                className="cancel-button"
+                onClick={() => onCancel(index)}
+              >
                 予約をキャンセル
               </button>
             </div>
           ))
         )}
-  
-        <button onClick={onBack}>
+
+        <button className="back-button" onClick={onBack}>
           カレンダーに戻る
         </button>
       </div>
-    );
-  }
-  
-  export default MyReservationsPage;
+    </div>
+  );
+}
+
+export default MyReservationsPage;

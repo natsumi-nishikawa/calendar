@@ -124,17 +124,26 @@ function CalendarPage({ reservations, onSelectSlot, onLogout, onMyReservations }
 
       <div className="calendar-legend">
         <span className="legend-ok">○：予約可能時間です。</span>
-        <span className="legend-triangle">△：残り枠あり僅かです。</span>
+        <span className="legend-triangle">△：残り枠わずかです。</span>
         <span className="legend-ng">×：予約済みです。</span>
       </div>
 
-      <button onClick={onMyReservations}>
-        自分の予約を見る
-      </button>
+      <div className="calendar-footer">
+        <button
+          className="my-reservations-button"
+          onClick={onMyReservations}
+        >
+          自分の予約を見る
+        </button>
 
-      <button className="logout-button" onClick={onLogout}>
-        ログオフ
-      </button>
+        <button
+          className="logout-button"
+          onClick={onLogout}
+        >
+          ログオフ
+        </button>
+      </div>
+
     </div>
   );
 }
