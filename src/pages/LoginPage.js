@@ -25,7 +25,21 @@ function LoginPage({ onLoginSuccess, onAdminLogin }) {
         onLoginSuccess(email);
       }
     } catch (error) {
-      alert(error.message);
+      if (error.code === "auth/email-already-in-use") {
+        alert("このメールアドレスはすでに登録されています。");
+      } else if (error.code === "auth/invalid-email") {
+        alert("正しいメールアドレスを入力してください。");
+      } else if (error.code === "auth/weak-password") {
+        alert("パスワードは6文字以上で入力してください。");
+      } else if (error.code === "auth/invalid-credential") {
+        alert("メールアドレスまたはパスワードが正しくありません。");
+      } else if (error.code === "auth/too-many-requests") {
+        alert("ログイン試行回数が多すぎます。しばらくしてからもう一度お試しください。");
+      } else if (error.code === "auth/network-request-failed") {
+        alert("通信に失敗しました。インターネット接続を確認してください。");
+      } else {
+        alert("ログインまたは新規登録に失敗しました。");
+      }
     }
   };
 

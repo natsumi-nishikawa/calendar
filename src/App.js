@@ -1,11 +1,14 @@
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminPage from "./pages/AdminPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { signOut } from "firebase/auth";
 import LoginPage from "./pages/LoginPage";
 import CalendarPage from "./pages/CalendarPage";
 import ReservationFormPage from "./pages/ReservationFormPage";
 import ConfirmPage from "./pages/ConfirmPage";
 import MyReservationsPage from "./pages/MyReservationsPage";
+import { db, auth } from "./firebase/config";
+import { addDoc, collection, getDocs, deleteDoc, doc, } from "firebase/firestore";
 
 function App() {
   // 今表示している画面
@@ -17,6 +20,21 @@ function App() {
   const [reservationData, setReservationData] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [loginUserEmail, setLoginUserEmail] = useState("");
+
+  useEffect(() => {
+    const loadReservations = async () => {
+      const querySnapshot = await getDocs(collection(db, "reservations"));
+  
+      const reservationList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+  
+      setReservations(reservationList);
+    };
+  
+    loadReservations();
+  }, []);
 
   // 予約フォームの入力内容をApp.jsで保持する
   const [formData, setFormData] = useState({
@@ -38,6 +56,12 @@ function App() {
     setPage("calendar");
   };
 
+  const handleLogout = async () => {
+    await signOut(auth);
+    setLoginUserEmail("");
+    setPage("login");
+  };
+
   // カレンダーの時間枠クリック時
   const handleSelectSlot = (date, time) => {
     setSelectedDate(date);
@@ -50,7 +74,7 @@ function App() {
     setPage("confirm");
   };
 
-  const handleSubmitReservation = () => {
+  const handleSubmitReservation = async () => {
     const isSameStaffAlreadyBooked = reservations.some(
       (reservation) =>
         reservation.dateText === reservationData.dateText &&
@@ -65,6 +89,11 @@ function App() {
 
     console.log("ログインユーザー:", loginUserEmail);
     console.log("予約データ:", reservationData);
+
+    await addDoc(collection(db, "reservations"), {
+      ...reservationData,
+      userEmail: loginUserEmail,
+    });
   
     setReservations([
       ...reservations,
@@ -79,12 +108,14 @@ function App() {
     setPage("calendar");
   };
 
-  const handleCancelReservation = (index) => {
+  const handleCancelReservation = async (index) => {
     const userReservations = reservations.filter(
       (reservation) => reservation.userEmail === loginUserEmail
     );
   
     const targetReservation = userReservations[index];
+
+    await deleteDoc(doc(db, "reservations", targetReservation.id));
   
     setReservations(
       reservations.filter(
