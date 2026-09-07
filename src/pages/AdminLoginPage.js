@@ -1,16 +1,30 @@
 import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/config";
 import "./AdminLoginPage.css";
 
 function AdminLoginPage({ onAdminLoginSuccess, onBack }) {
   const [adminId, setAdminId] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleAdminLogin = (e) => {
+  const handleAdminLogin = async (e) => {
     e.preventDefault();
 
-    if (adminId === "admin" && password === "1234") {
+    try {
+      if (adminId !== "admin") {
+        alert("管理者IDまたはパスワードが違います");
+        return;
+      }
+
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        "admin@example.com",
+        password
+      );
+
       onAdminLoginSuccess();
-    } else {
+
+    } catch (error) {
       alert("管理者IDまたはパスワードが違います");
     }
   };
@@ -22,6 +36,7 @@ function AdminLoginPage({ onAdminLoginSuccess, onBack }) {
 
         <form onSubmit={handleAdminLogin}>
           <label>管理者ID</label>
+
           <input
             type="text"
             placeholder="管理者ID"
@@ -30,6 +45,7 @@ function AdminLoginPage({ onAdminLoginSuccess, onBack }) {
           />
 
           <label>パスワード</label>
+
           <input
             type="password"
             placeholder="パスワード"
@@ -37,11 +53,18 @@ function AdminLoginPage({ onAdminLoginSuccess, onBack }) {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button className="admin-login-main-button" type="submit">
+          <button
+            className="admin-login-main-button"
+            type="submit"
+          >
             ログイン
           </button>
 
-          <button className="admin-login-back-button" type="button" onClick={onBack}>
+          <button
+            className="admin-login-back-button"
+            type="button"
+            onClick={onBack}
+          >
             戻る
           </button>
         </form>

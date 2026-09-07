@@ -16,13 +16,31 @@ function LoginPage({ onLoginSuccess, onAdminLogin }) {
 
     try {
       if (isRegister) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+    
         alert("新規登録しました");
-        onLoginSuccess(email);
+    
+        onLoginSuccess(
+          userCredential.user.email,
+          userCredential.user.uid
+        );
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+    
         alert("ログインしました");
-        onLoginSuccess(email);
+    
+        onLoginSuccess(
+          userCredential.user.email,
+          userCredential.user.uid
+        );
       }
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {

@@ -1,6 +1,6 @@
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminPage from "./pages/AdminPage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { signOut } from "firebase/auth";
 import LoginPage from "./pages/LoginPage";
 import CalendarPage from "./pages/CalendarPage";
@@ -8,7 +8,7 @@ import ReservationFormPage from "./pages/ReservationFormPage";
 import ConfirmPage from "./pages/ConfirmPage";
 import MyReservationsPage from "./pages/MyReservationsPage";
 import { db, auth } from "./firebase/config";
-import { addDoc, collection, getDocs, deleteDoc, doc, } from "firebase/firestore";
+import { addDoc, collection, getDocs, deleteDoc, doc, query, where, } from "firebase/firestore";
 
 function App() {
   // 今表示している画面
@@ -20,21 +20,8 @@ function App() {
   const [reservationData, setReservationData] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [loginUserEmail, setLoginUserEmail] = useState("");
-
-  useEffect(() => {
-    const loadReservations = async () => {
-      const querySnapshot = await getDocs(collection(db, "reservations"));
-  
-      const reservationList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-  
-      setReservations(reservationList);
-    };
-  
-    loadReservations();
-  }, []);
+  const [reservationSlots, setReservationSlots] = useState([]);
+  const [loginUserId, setLoginUserId] = useState("");
 
   // 予約フォームの入力内容をApp.jsで保持する
   const [formData, setFormData] = useState({
@@ -46,19 +33,56 @@ function App() {
     request: "",
   });
 
-  const handleAdminLoginSuccess = () => {
+  const handleAdminLoginSuccess = async () => {
+    const querySnapshot = await getDocs(
+      collection(db, "reservations")
+    );
+  
+    const reservationList = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  
+    setReservations(reservationList);
     setPage("admin");
   };
 
   // ログイン成功時
-  const handleLoginSuccess = (email) => {
+  const handleLoginSuccess = async (email, uid) => {
     setLoginUserEmail(email);
+    setLoginUserId(uid);
+  
+    const q = query(
+      collection(db, "reservations"),
+      where("userId", "==", uid)
+    );
+  
+    const querySnapshot = await getDocs(q);
+  
+    const reservationList = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const slotSnapshot = await getDocs(
+      collection(db, "reservationSlots")
+    );
+    
+    const slotList = slotSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    setReservationSlots(slotList);
+     
+    setReservations(reservationList);
     setPage("calendar");
   };
 
   const handleLogout = async () => {
     await signOut(auth);
     setLoginUserEmail("");
+    setLoginUserId("");
     setPage("login");
   };
 
@@ -75,11 +99,11 @@ function App() {
   };
 
   const handleSubmitReservation = async () => {
-    const isSameStaffAlreadyBooked = reservations.some(
-      (reservation) =>
-        reservation.dateText === reservationData.dateText &&
-        reservation.time === reservationData.time &&
-        reservation.staff === reservationData.staff
+    const isSameStaffAlreadyBooked = reservationSlots.some(
+      (slot) =>
+        slot.dateText === reservationData.dateText &&
+        slot.time === reservationData.time &&
+        slot.staff === reservationData.staff
     );
   
     if (isSameStaffAlreadyBooked) {
@@ -90,16 +114,43 @@ function App() {
     console.log("ログインユーザー:", loginUserEmail);
     console.log("予約データ:", reservationData);
 
-    await addDoc(collection(db, "reservations"), {
+    const docRef = await addDoc(collection(db, "reservations"), {
       ...reservationData,
       userEmail: loginUserEmail,
+      userId: loginUserId,
     });
+
+    const slotDocRef = await addDoc(collection(db, "reservationSlots"), {
+      dateText: reservationData.dateText,
+      time: reservationData.time,
+      staff: reservationData.staff,
+      userId: loginUserId,
+      reservationId: docRef.id,
+    });
+
+    const q = query(
+      collection(db, "reservations"),
+      where("userId", "==", loginUserId)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    
+    const reservationList = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    
+    setReservations(reservationList);
   
-    setReservations([
-      ...reservations,
+    setReservationSlots([
+      ...reservationSlots,
       {
-        ...reservationData,
-        userEmail: loginUserEmail,
+        id: slotDocRef.id,
+        dateText: reservationData.dateText,
+        time: reservationData.time,
+        staff: reservationData.staff,
+        userId: loginUserId,
+        reservationId: docRef.id,
       },
     ]);
   
@@ -110,16 +161,39 @@ function App() {
 
   const handleCancelReservation = async (index) => {
     const userReservations = reservations.filter(
-      (reservation) => reservation.userEmail === loginUserEmail
+      (reservation) => reservation.userId === loginUserId
     );
   
     const targetReservation = userReservations[index];
-
-    await deleteDoc(doc(db, "reservations", targetReservation.id));
   
+    // reservationsから予約を削除
+    await deleteDoc(
+      doc(db, "reservations", targetReservation.id)
+    );
+  
+    // 同じ予約に対応するreservationSlotsを探す
+    const targetSlot = reservationSlots.find(
+      (slot) => slot.reservationId === targetReservation.id
+    );
+  
+    // reservationSlotsから予約枠を削除
+    if (targetSlot) {
+      await deleteDoc(
+        doc(db, "reservationSlots", targetSlot.id)
+      );
+    }
+  
+    // 画面上の予約一覧からも削除
     setReservations(
       reservations.filter(
-        (reservation) => reservation !== targetReservation
+        (reservation) => reservation.id !== targetReservation.id
+      )
+    );
+  
+    // 画面上の予約枠からも削除
+    setReservationSlots(
+      reservationSlots.filter(
+        (slot) => slot.reservationId !== targetReservation.id
       )
     );
   
@@ -128,6 +202,7 @@ function App() {
 
   console.log("現在のログインメール:", loginUserEmail);
   console.log("現在の予約一覧:", reservations);
+  console.log("現在のログインUID:", loginUserId);
 
   return (
     <div>
@@ -142,7 +217,7 @@ function App() {
         <AdminPage
           reservations={reservations}
           onBack={() => setPage("calendar")}
-          onLogout={() => setPage("login")}
+          onLogout={handleLogout}
         />
       )}
 
@@ -157,9 +232,9 @@ function App() {
       {/* カレンダー画面 */}
       {page === "calendar" && (
         <CalendarPage
-          reservations={reservations}
+          reservations={reservationSlots}
           onSelectSlot={handleSelectSlot}
-          onLogout={() => setPage("login")}
+          onLogout={handleLogout}
           onMyReservations={() => setPage("myReservations")}
         />
       )}
@@ -188,7 +263,7 @@ function App() {
       {page === "myReservations" && (
         <MyReservationsPage
           reservations={reservations.filter(
-            (reservation) => reservation.userEmail === loginUserEmail
+            (reservation) => reservation.userId === loginUserId
           )}
           onBack={() => setPage("calendar")}
           onCancel={handleCancelReservation}
