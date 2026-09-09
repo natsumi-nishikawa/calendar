@@ -1,3 +1,4 @@
+import HomePage from "./pages/HomePage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminPage from "./pages/AdminPage";
 import { useState } from "react";
@@ -12,7 +13,7 @@ import { addDoc, collection, getDocs, deleteDoc, doc, query, where, } from "fire
 
 function App() {
   // 今表示している画面
-  const [page, setPage] = useState("login");
+  const [page, setPage] = useState("home");
 
   // 選択した日時
   const [selectedDate, setSelectedDate] = useState(null);
@@ -206,6 +207,12 @@ function App() {
 
   return (
     <div>
+      {page === "home" && (
+        <HomePage
+          onReserve={() => setPage("login")}
+        />
+      )}
+
       {page === "adminLogin" && (
         <AdminLoginPage
           onAdminLoginSuccess={handleAdminLoginSuccess}
